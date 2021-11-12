@@ -1,5 +1,5 @@
 [Unit]
-Description=The weatherman is telling sth about your weather
+Description=The watch bot is watching
 
 # Requirements
 Requires=network.target
