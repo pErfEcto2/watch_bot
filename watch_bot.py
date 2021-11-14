@@ -56,9 +56,9 @@ def answerToMessage(message):
         
         elif message.text == buttons[1]:
             answerCode = lib.checkBotStates(message, bots, bot)
-            if answerCode == 0:
+            if answerCode == 0 or answerCode == 1:
                 bot.send_message(message.chat.id, "Everything is okay")
-            else:
+            elif answerCode == 2:
                 bot.send_message(message.chat.id, "Something went wrong")
 
         elif message.text == buttons[2]:
