@@ -24,7 +24,7 @@ def checkBotStates(message, bots: list, messageBot) -> int: # 0 - everything is 
                 return 0
             # if bot is inactive and it's end of the list and it's day
             if not pyProc and i + 1 == len(processes):
-                log.error(f"Error: {bot} is inactive, trying to restart")
+                log.warning(f"Warning: {bot} is inactive, trying to restart")
                 answer = f"**{bot}** is inactive"
                 messageBot.send_message(message.chat.id, answer, parse_mode="Markdown")
                 messageBot.send_message(message.chat.id, "Trying to restart")

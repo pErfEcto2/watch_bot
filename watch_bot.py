@@ -9,6 +9,7 @@ import lib
 
 botIdPath = "/home/projects/watch_bot/bot_id"
 botsPath = "/home/projects/watch_bot/bots"
+creator_path = "/home/projects/weatherman/creator"
 
 #define log format
 log.basicConfig(filename="/var/log/watch_bot/log.txt", level=log.INFO, format="%(asctime)s:%(message)s")
@@ -19,6 +20,9 @@ with open(botIdPath, "r") as f:
 
 with open(botsPath, "r") as f:
     bots = f.readline().split()
+
+with open(creator_path, "r") as f:
+    creator = f.readline()
 
 bot = tb.TeleBot(bot_id)
 # define a keyboard
@@ -41,17 +45,18 @@ def say_hi(message):
 #if message is "ping", bot will say "pong"
 @bot.message_handler(content_types=["text"])
 def answerToMessage(message):
-    if message.text == buttons[1]:
-        bot.send_message(message.chat.id, "pong")
-    
-    elif message.text == buttons[2]:
-        answerCode = lib.checkBotStates(message, bots, bot)
-        if answerCode == 0:
-            bot.send_message(message.chat.id, "Everything is okay")
-    
-    elif message.text == buttons[3]:
-        joke = lib.getJoke()
-        bot.send_message(message.chat.id, joke)
+    if message.from_user.username == creator:
+        if message.text == buttons[1]:
+            bot.send_message(message.chat.id, "pong")
+
+        elif message.text == buttons[2]:
+            answerCode = lib.checkBotStates(message, bots, bot)
+            if answerCode == 0:
+                bot.send_message(message.chat.id, "Everything is okay")
+
+        elif message.text == buttons[3]:
+            joke = lib.getJoke()
+            bot.send_message(message.chat.id, joke)
 try:
     bot.polling()
 except Exception as e:
