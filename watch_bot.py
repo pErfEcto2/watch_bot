@@ -4,6 +4,7 @@ import os
 import telebot as tb
 import time
 import logging as log
+import time as t
 import lib
 
 botIdPath = "/home/projects/watch_bot/bot_id"
@@ -21,7 +22,7 @@ with open(botsPath, "r") as f:
 
 bot = tb.TeleBot(bot_id)
 # define a keyboard
-buttons = ["/start", "ping"]
+buttons = ["/start", "ping", "check", "joke"]
 keyboard = tb.types.ReplyKeyboardMarkup()
 keyboard.row(*buttons)
 # flag to start lib.checkBotStates() only once
@@ -32,15 +33,25 @@ def say_hi(message):
     global flag
     bot.send_message(message.chat.id, "Hi", reply_markup=keyboard)
     if flag:
-        flag = not flag
-        lib.checkBotStates(message, bots, bot)
-    
+        while lib.isDay():
+            flag = not flag
+            lib.checkBotStates(message, bots, bot)
+            t.sleep(5)
+
 #if message is "ping", bot will say "pong"
 @bot.message_handler(content_types=["text"])
-def pong(message):
-    if message.text == "ping":
+def answerToMessage(message):
+    if message.text == buttons[1]:
         bot.send_message(message.chat.id, "pong")
-
+    
+    elif message.text == buttons[2]:
+        answerCode = lib.checkBotStates(message, bots, bot)
+        if answerCode == 0:
+            bot.send_message(message.chat.id, "Everything is okay")
+    
+    elif message.text == buttons[3]:
+        joke = lib.getJoke()
+        bot.send_message(message.chat.id, joke)
 try:
     bot.polling()
 except Exception as e:
