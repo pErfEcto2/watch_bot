@@ -36,7 +36,7 @@ flag: bool = True
 def say_hi(message):
     global flag
     bot.send_message(message.chat.id, "Hi", reply_markup=keyboard)
-    if flag:
+    if flag and message.from_user.username == creator:
         while lib.isDay():
             flag = not flag
             lib.checkBotStates(message, bots, bot)
