@@ -9,9 +9,9 @@ log.basicConfig(filename="/var/log/watch_bot/log.txt", level=log.INFO, format="%
 
 def isDay() -> bool:
     curTime = int(t.strftime("%H", t.gmtime())) + 3
-    return not (curTime >= 22 or curTime <= 9)
+    return not (curTime >= 23 or curTime <= 8)
 
-def checkBotStates(message, bots: list, messageBot) -> int: # 0 - everything is okay; 1 - bot was restarted; 2 - bot wasn't restarted
+def checkBotStates(message, bots: list, messageBot) -> int: # 0 - everything is okay; 1 - bot was restarted
     os.system("ps ax > processes")
     with open("processes", "r") as f:
         processes = f.readlines()
@@ -39,7 +39,6 @@ def checkBotStates(message, bots: list, messageBot) -> int: # 0 - everything is 
                         answer = f"{bot} wasn't restarted"
                         log.info(answer)
                         messageBot.send_message(message.chat.id, answer)
-                        return 2
 
 def getJoke() -> str:
     url = "http://rzhunemogu.ru/RandJSON.aspx?CType=1"

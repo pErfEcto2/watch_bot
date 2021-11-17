@@ -36,7 +36,8 @@ flag: bool = True
 def say_hi(message):
     global flag
     bot.send_message(message.chat.id, "Checking started", reply_markup=keyboard)
-    if message.from_user.username == creator:
+    while message.from_user.username == creator:
+        t.sleep(5)
         while flag and lib.isDay():
             lib.checkBotStates(message, bots, bot)
             t.sleep(5)
@@ -49,17 +50,15 @@ def answerToMessage(message):
             global flag
             if not flag:
                 flag = True
-                say_hi(message)
+                bot.send_message(message.chat.id, "Checking started")
             else:
                 bot.send_message(message.chat.id, "Checking stopped")
                 flag = False
         
         elif message.text == buttons[1]:
             answerCode = lib.checkBotStates(message, bots, bot)
-            if answerCode == 0 or answerCode == 1:
+            if answerCode == 0:
                 bot.send_message(message.chat.id, "Everything is okay")
-            elif answerCode == 2:
-                bot.send_message(message.chat.id, "Something went wrong")
 
         elif message.text == buttons[2]:
             joke = lib.getJoke()
